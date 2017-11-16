@@ -40,27 +40,32 @@ public class HostedNetwork {
 		hostedInfo.setSsid(resourceProperties.getProperties().getProperty("wlan-ssid"));
 		
 		hostedNetworkLogger.info("Generating the Hostednetwork passord");
-		hostedInfo.setPassword(sessionID);
+		hostedInfo.setPassword(resourceProperties.getProperties().getProperty("wlan-password"));
 		
 		hostedNetworkLogger.info("Stoping the hostedNetwork");
 		HostedNetwork.stopHostedNetwork();
+		CommonUtils.makeDelay((long) 500);
 		
 		hostedNetworkLogger.info("Initializing the hostedNetwork");
 		createHostedNetwork();
+		CommonUtils.makeDelay((long) 1000);
 		
 		hostedNetworkLogger.info("Strating the hostedNetwork");
 		HostedNetwork.startHostedNetwork();
+		CommonUtils.makeDelay((long) 1000);
 		
 		hostedNetworkLogger.info("Preparing the Address for spring boot");
 		return prepareInetAddress();
 	}
 
+	
+	
 	private InetAddress prepareInetAddress() {
 		InetAddress resultAddress = null;
 		try {
 			hostedNetworkLogger.info("Iterating the Network interfaces to get hosted network");
-			for (Enumeration<NetworkInterface> enumeratedInterface = NetworkInterface.getNetworkInterfaces();
-					enumeratedInterface.hasMoreElements();) {
+			Enumeration<NetworkInterface> enumeratedInterface = NetworkInterface.getNetworkInterfaces();
+			while (enumeratedInterface.hasMoreElements()) {
 				NetworkInterface networkInterface = enumeratedInterface.nextElement();
 				if(networkInterface.getDisplayName().contains(
 						mapperProperties.getProperties().getProperty("network-interface-wifi"))) {
@@ -89,7 +94,7 @@ public class HostedNetwork {
 		hostedNetworkLogger.info("Creating the host network");
 		String[] commandArgument = new String[2];
 		commandArgument[0] = hostedInfo.getSsid();
-		commandArgument[1] = hostedInfo.getPassword() + hostedInfo.getPassword();
+		commandArgument[1] = hostedInfo.getPassword();
 		Command.execute(CommonUtils.prepareCommand(systemCommands.getProperties().getProperty("wifi-set-host"),
 				commandArgument));
 	}

@@ -10,7 +10,7 @@ public class SystemInfoMaker {
 	public static SystemInfo systemInfo = new SystemInfo();
 
 	private Logger systemLogger = Logger.getInstace();
-	
+
 	private String wifiAdapter = "";
 
 	private LoadProperties systemCommands = GetProperties.access("command");
@@ -21,31 +21,31 @@ public class SystemInfoMaker {
 
 	public SystemInfoMaker() {
 		systemLogger.info("Extracting the System Info");
-		
-        String systemInformation = Command.execute(systemCommands.getProperties().getProperty("system-info"));
-		
-        systemInfo.setHostName(extractStringFromLine(systemInformation,
-        		mapperProperties.getProperties().getProperty("host-name")));
+
+		String systemInformation = Command.execute(systemCommands.getProperties().getProperty("system-info"));
+
+		systemInfo.setHostName(extractStringFromLine(systemInformation,
+				mapperProperties.getProperties().getProperty("host-name")));
 		systemInfo.setInstalledRam(extractStringFromLine(systemInformation,
 				mapperProperties.getProperties().getProperty("installed-ram")));
 		systemInfo.setAvailableRam(extractStringFromLine(systemInformation,
 				mapperProperties.getProperties().getProperty("available-ram")));
-		
+
 		String networkInterfaces = Command.execute(systemCommands.getProperties().getProperty("wifi-interface"));
-		
+
 		addInterfaceList(networkInterfaces);
-		
+
 		systemLogger.info("System information extracted");
 		systemLogger.high(systemInfo.toString());
 	}
 
 	private void addInterfaceList(String networkInterfaces) {
-		systemLogger.info(networkInterfaces.substring(0, networkInterfaces.indexOf('\n')));
 		String[] splitedString = networkInterfaces.split(
 				mapperProperties.getProperties().getProperty("wifi-interface-name"));
 		for(int stringCount = 1; stringCount < splitedString.length; stringCount++) {
-			systemInfo.getWifiDriverList().add(splitedString[stringCount].substring(
-					splitedString[stringCount].indexOf(": ") + 2, splitedString[stringCount].indexOf("\n")));
+			if(!splitedString[stringCount].contains(mapperProperties.getProperties().getProperty("wifi-hardware-off")))
+				systemInfo.getWifiDriverList().add(splitedString[stringCount].substring(
+						splitedString[stringCount].indexOf(": ") + 2, splitedString[stringCount].indexOf("\n")));
 		}
 	}
 
@@ -65,6 +65,7 @@ public class SystemInfoMaker {
 	}
 
 	public boolean validateWiFi() {
+		systemLogger.info("Avaliable Driver" + systemInfo.getWifiDriverList().size());
 		if(systemInfo.getWifiDriverList().size() > 0) {
 			return true;
 		}

@@ -71,8 +71,11 @@ public class Publisher {
 	private void postImplement() {
 		if(Publisher.isHosted) {
 			publisherLogger.info("Host Created Successfully");
-			publisherLogger.info("Wifi : " + HostedNetwork.getHostedInfo().getSsid() + " OTP : " + this.sessionId + this.sessionId);
+			publisherLogger.info("Wifi : " + HostedNetwork.getHostedInfo().getSsid() +
+					" Password : " + HostedNetwork.getHostedInfo().getPassword());
 			publisherLogger.info("Spring is injected in : " +  Publisher.inetAddress.getHostAddress());
+		} else {
+			publisherLogger.info("Spring is injected in : localhost");
 		}
 	}
 

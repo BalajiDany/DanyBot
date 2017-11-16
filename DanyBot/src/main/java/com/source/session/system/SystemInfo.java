@@ -49,7 +49,7 @@ public class SystemInfo {
 	public String toString() {
 		StringBuilder interfaceBuilder = new StringBuilder();
 		for(String interfaceString:this.wifiDriverList) {
-			interfaceBuilder.append(" -" + interfaceString);
+			interfaceBuilder.append(" - " + interfaceString);
 		}
 		return this.hostName + " " + this.availableRam + "/" + this.installedRam + interfaceBuilder.toString();
 	}

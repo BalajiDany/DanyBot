@@ -12,6 +12,8 @@ public class CustomizationBean implements EmbeddedServletContainerCustomizer {
 	@Override
 	public void customize(ConfigurableEmbeddedServletContainer container) {
 		container.setPort(80);
-		container.setAddress(Publisher.inetAddress);
+		if(Publisher.isHosted) {
+			container.setAddress(Publisher.inetAddress);
+		}
 	}
 }

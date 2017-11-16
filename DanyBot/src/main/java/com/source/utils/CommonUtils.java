@@ -29,4 +29,12 @@ public class CommonUtils {
 		}
 		return command;
 	}
+	
+	public static void makeDelay(Long delay) {
+		try {
+			Thread.sleep(delay);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+	}
 }

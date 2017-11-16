@@ -19,6 +19,11 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-thymeleaf</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>javax.comm</groupId>
+			<artifactId>comm</artifactId>
+			<version>0.0.1</version>
+		</dependency>
 	</dependencies>
 	<build>
 		<plugins>
